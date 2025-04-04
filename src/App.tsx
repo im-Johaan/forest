@@ -1,26 +1,91 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React, { useState } from 'react';
+import { ThemeProvider, createTheme, CssBaseline } from '@mui/material';
+import { Container, Box, Button, Typography } from '@mui/material';
+import Quiz from './components/Quiz';
+import Results from './components/Results';
+
+const darkTheme = createTheme({
+  palette: {
+    mode: 'dark',
+    primary: {
+      main: '#90caf9',
+    },
+    secondary: {
+      main: '#f48fb1',
+    },
+    background: {
+      default: '#121212',
+      paper: '#1e1e1e',
+    },
+  },
+});
 
 function App() {
+  const [isQuizStarted, setIsQuizStarted] = useState(false);
+  const [showResults, setShowResults] = useState(false);
+  const [score, setScore] = useState(0);
+  const [wrongAnswers, setWrongAnswers] = useState<number[]>([]);
+
+  const handleStartQuiz = () => {
+    setIsQuizStarted(true);
+    setShowResults(false);
+    setScore(0);
+    setWrongAnswers([]);
+  };
+
+  const handleQuizComplete = (finalScore: number, incorrectAnswers: number[]) => {
+    setScore(finalScore);
+    setWrongAnswers(incorrectAnswers);
+    setShowResults(true);
+    setIsQuizStarted(false);
+  };
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
+    <ThemeProvider theme={darkTheme}>
+      <CssBaseline />
+      <Container maxWidth="md">
+        <Box
+          sx={{
+            minHeight: '100vh',
+            display: 'flex',
+            flexDirection: 'column',
+            alignItems: 'center',
+            justifyContent: 'center',
+            py: 4,
+          }}
         >
-          Learn React
-        </a>
-      </header>
-    </div>
+          {!isQuizStarted && !showResults && (
+            <Box textAlign="center">
+              <Typography variant="h3" component="h1" gutterBottom>
+                Forest Management Quiz
+              </Typography>
+              <Button
+                variant="contained"
+                color="primary"
+                size="large"
+                onClick={handleStartQuiz}
+                sx={{ mt: 4 }}
+              >
+                Attend Quiz
+              </Button>
+            </Box>
+          )}
+
+          {isQuizStarted && (
+            <Quiz onComplete={handleQuizComplete} />
+          )}
+
+          {showResults && (
+            <Results
+              score={score}
+              wrongAnswers={wrongAnswers}
+              onRestart={handleStartQuiz}
+            />
+          )}
+        </Box>
+      </Container>
+    </ThemeProvider>
   );
 }
 
-export default App;
+export default App; 
