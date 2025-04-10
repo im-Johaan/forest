@@ -42,6 +42,8 @@ function App() {
   };
 
   return (
+    <>
+    <Analytics />
     <ThemeProvider theme={darkTheme}>
       <CssBaseline />
       <Container maxWidth="md">
@@ -86,6 +88,7 @@ function App() {
         </Box>
       </Container>
     </ThemeProvider>
+    </>
   );
 }
 
