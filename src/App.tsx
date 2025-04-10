@@ -3,6 +3,7 @@ import { ThemeProvider, createTheme, CssBaseline } from '@mui/material';
 import { Container, Box, Button, Typography } from '@mui/material';
 import Quiz from './components/Quiz';
 import Results from './components/Results';
+import { Analytics } from "@vercel/analytics/react"
 
 const darkTheme = createTheme({
   palette: {
